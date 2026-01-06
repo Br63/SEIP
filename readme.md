@@ -63,7 +63,7 @@ SEIP/
 
 Clone the repository:
 
-git clone https://github.com/your-username/seip.git
+git clone https://github.com/Br63/seip.git
 
 
 Navigate to the project directory:
