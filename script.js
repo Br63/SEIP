@@ -1,9 +1,81 @@
-  let activityCount = 0;
-        let aiActionsCount = 89;
-        let activeCustomers = 1247;
-        let ruleStates = {1: true, 2: true, 3: true};
 
-        const customerBehaviors = [
+/* =======================
+   GLOBAL STATE
+======================= */
+let activityCount = 0;
+let aiActionsCount = 89;
+let activeCustomers = 1247;
+let ruleStates = {1: true, 2: true, 3: true};
+let notifications = [];
+let notificationCount = 5;
+
+/* =======================
+   MOCK ANALYTICS DATA
+======================= */
+const ruleAnalytics = {
+    1: {
+        name: 'Product View Discount Rule',
+        triggered: 156,
+        conversions: 100,
+        conversionRate: 64,
+        revenue: 12500,
+        roi: 320,
+        bestTime: '7–9 PM',
+        bestDay: 'Friday',
+        dailyData: [
+            { day: 'Mon', triggers: 20 },
+            { day: 'Tue', triggers: 25 },
+            { day: 'Wed', triggers: 30 },
+            { day: 'Thu', triggers: 28 },
+            { day: 'Fri', triggers: 35 },
+            { day: 'Sat', triggers: 18 },
+            { day: 'Sun', triggers: 10 }
+        ]
+    },
+    2: {
+        name: 'Cart Abandonment Rule',
+        triggered: 98,
+        conversions: 51,
+        conversionRate: 52,
+        revenue: 8200,
+        roi: 280,
+        bestTime: '8–10 PM',
+        bestDay: 'Saturday',
+        dailyData: [
+            { day: 'Mon', triggers: 12 },
+            { day: 'Tue', triggers: 14 },
+            { day: 'Wed', triggers: 16 },
+            { day: 'Thu', triggers: 15 },
+            { day: 'Fri', triggers: 20 },
+            { day: 'Sat', triggers: 14 },
+            { day: 'Sun', triggers: 7 }
+        ]
+    },
+    3: {
+        name: 'Customer Reactivation Rule',
+        triggered: 43,
+        conversions: 16,
+        conversionRate: 38,
+        revenue: 4100,
+        roi: 210,
+        bestTime: '6–8 PM',
+        bestDay: 'Sunday',
+        dailyData: [
+            { day: 'Mon', triggers: 5 },
+            { day: 'Tue', triggers: 6 },
+            { day: 'Wed', triggers: 7 },
+            { day: 'Thu', triggers: 6 },
+            { day: 'Fri', triggers: 8 },
+            { day: 'Sat', triggers: 7 },
+            { day: 'Sun', triggers: 4 }
+        ]
+    }
+};
+
+/* =======================
+   CUSTOMER BEHAVIORS
+======================= */
+ const customerBehaviors = [
             {
                 icon: '👁️',
                 title: 'High Intent Detected',
@@ -54,70 +126,85 @@
             }
         ];
 
-        function simulateCustomerBehavior() {
-            const behavior = customerBehaviors[Math.floor(Math.random() * customerBehaviors.length)];
-            const customerId = Math.floor(Math.random() * 9000) + 1000;
-            
-            const activityFeed = document.getElementById('activityFeed');
-            const newActivity = document.createElement('div');
-            newActivity.className = 'activity-item';
-            newActivity.innerHTML = `
-                <div class="activity-icon">${behavior.icon}</div>
-                <div class="activity-content">
-                    <div class="activity-title">${behavior.title}</div>
-                    <div class="activity-description">Customer #${customerId} ${behavior.description}</div>
-                    <div class="activity-time">Just now</div>
+
+/* =======================
+   NOTIFICATIONS
+======================= */
+function toggleNotifications(event) {
+    event.stopPropagation();
+    document.getElementById('notificationDropdown').classList.toggle('show');
+}
+
+function renderNotifications() {
+    const list = document.getElementById('notificationList');
+    list.innerHTML = '';
+
+    notifications.forEach(n => {
+        const item = document.createElement('div');
+        item.className = 'notification-item unread';
+        item.innerHTML = `
+            <div style="display:flex;">
+                <div class="notification-icon">${n.icon}</div>
+                <div class="notification-content">
+                    <div class="notification-title">${n.title}</div>
+                    <div class="notification-text">${n.text}</div>
+                    <div class="notification-time">Just now</div>
                 </div>
-                <div class="activity-action">${behavior.action}</div>
-            `;
-            
-            activityFeed.insertBefore(newActivity, activityFeed.firstChild);
-            
-            // Update metrics
-            aiActionsCount++;
-            document.getElementById('aiActions').textContent = aiActionsCount;
-            
-            // Animate metric
-            const aiActionsElement = document.getElementById('aiActions');
-            aiActionsElement.style.transform = 'scale(1.1)';
-            setTimeout(() => {
-                aiActionsElement.style.transform = 'scale(1)';
-            }, 200);
+            </div>
+        `;
+        list.appendChild(item);
+    });
 
-            // Update active customers randomly
-            activeCustomers += Math.floor(Math.random() * 10) - 3;
-            document.getElementById('activeCustomers').textContent = activeCustomers.toLocaleString();
-        }
+    document.getElementById('notificationCount').textContent = notifications.length;
+}
 
-        function toggleRule(ruleId) {
-            ruleStates[ruleId] = !ruleStates[ruleId];
-            const ruleElement = document.querySelector(`[data-rule-id="${ruleId}"]`);
-            const toggle = ruleElement.querySelector('.rule-toggle');
-            const statusElement = ruleElement.querySelector('.stat span:nth-child(2)');
-            const pulseElement = ruleElement.querySelector('.pulse');
-            
-            if (ruleStates[ruleId]) {
-                toggle.classList.add('active');
-                statusElement.textContent = 'ACTIVE';
-                statusElement.className = 'status-active';
-                pulseElement.style.display = 'inline-block';
-            } else {
-                toggle.classList.remove('active');
-                statusElement.textContent = 'INACTIVE';
-                statusElement.className = 'status-inactive';
-                pulseElement.style.display = 'none';
-            }
-        }
+function addNotification(notification) {
+    notifications.unshift(notification);
+    renderNotifications();
+}
 
-        function openRuleBuilder() {
-            document.getElementById('ruleModal').classList.add('show');
-        }
+function clearAllNotifications() {
+    notifications = [];
+    renderNotifications();
+}
 
-        function closeModal() {
-            document.getElementById('ruleModal').classList.remove('show');
-        }
+/* =======================
+   SIMULATION
+======================= */
+function simulateCustomerBehavior() {
+    const behavior = customerBehaviors[Math.floor(Math.random() * customerBehaviors.length)];
+    const customerId = Math.floor(Math.random() * 9000) + 1000;
 
-        function createRule(event) {
+    const feed = document.getElementById('activityFeed');
+    const item = document.createElement('div');
+    item.className = 'activity-item';
+    item.innerHTML = `
+        <div class="activity-icon">${behavior.icon}</div>
+        <div class="activity-content">
+            <div class="activity-title">${behavior.title}</div>
+            <div class="activity-description">Customer #${customerId} ${behavior.description}</div>
+            <div class="activity-time">Just now</div>
+        </div>
+        <div class="activity-action">${behavior.action}</div>
+    `;
+    feed.prepend(item);
+
+    aiActionsCount++;
+    document.getElementById('aiActions').textContent = aiActionsCount;
+
+    activeCustomers += Math.floor(Math.random() * 6) - 2;
+    document.getElementById('activeCustomers').textContent = activeCustomers.toLocaleString();
+
+    if (behavior.notification) addNotification(behavior.notification);
+
+       // ===== FIX: Add a notification for every behavior =====
+    addNotification({
+        icon: behavior.icon,
+        title: behavior.title,
+        text: `Customer #${customerId} ${behavior.description}`
+    });
+}
+  function createRule(event) {
             event.preventDefault();
             
             const triggerType = document.getElementById('triggerType').value;
@@ -162,29 +249,85 @@
             event.target.reset();
         }
 
-        function clearActivities() {
-            const activityFeed = document.getElementById('activityFeed');
-            activityFeed.innerHTML = '<div class="activity-item"><div class="activity-icon">✨</div><div class="activity-content"><div class="activity-title">Activity Feed Cleared</div><div class="activity-description">Ready for new customer interactions</div></div></div>';
-        }
+/* =======================
+   RULE TOGGLE
+======================= */
+function toggleRule(ruleId, event) {
+    event.stopPropagation();
+    ruleStates[ruleId] = !ruleStates[ruleId];
+    const rule = document.querySelector(`[data-rule-id="${ruleId}"]`);
+    const toggle = rule.querySelector('.rule-toggle');
+    const status = rule.querySelector('.status-active, .status-inactive');
+    const pulse = rule.querySelector('.pulse');
 
-        // Auto-simulate customer behavior every 8 seconds
+    if (ruleStates[ruleId]) {
+        toggle.classList.add('active');
+        status.textContent = 'ACTIVE';
+        status.className = 'status-active';
+        pulse.style.display = 'inline-block';
+    } else {
+        toggle.classList.remove('active');
+        status.textContent = 'INACTIVE';
+        status.className = 'status-inactive';
+        pulse.style.display = 'none';
+    }
+}
+
+/* =======================
+   MODALS
+======================= */
+function openRuleBuilder() {
+    document.getElementById('ruleModal').classList.add('show');
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+}
+
+/* =======================
+   ANALYTICS
+======================= */
+function openAnalytics(ruleId, event) {
+    event.stopPropagation();
+    const analytics = ruleAnalytics[ruleId];
+    if (!analytics) return alert('No analytics available');
+
+    document.getElementById('analyticsTitle').textContent =
+        `Performance Analytics - ${analytics.name}`;
+
+    document.getElementById('analyticsContent').innerHTML = `
+        <div class="analytics-grid">
+            <div class="analytics-card"><div class="analytics-label">Triggered</div><div class="analytics-value">${analytics.triggered}</div></div>
+            <div class="analytics-card"><div class="analytics-label">Conversions</div><div class="analytics-value">${analytics.conversions}</div></div>
+            <div class="analytics-card"><div class="analytics-label">Conversion Rate</div><div class="analytics-value">${analytics.conversionRate}%</div></div>
+            <div class="analytics-card"><div class="analytics-label">Revenue</div><div class="analytics-value">$${analytics.revenue.toLocaleString()}</div></div>
+            <div class="analytics-card"><div class="analytics-label">ROI</div><div class="analytics-value">${analytics.roi}%</div></div>
+            <div class="analytics-card"><div class="analytics-label">Best Time</div><div class="analytics-value">${analytics.bestTime}</div></div>
+        </div>
+    `;
+
+    document.getElementById('analyticsModal').classList.add('show');
+}
+
+   // Auto-simulate customer behavior every 8 seconds
         setInterval(() => {
             if (Math.random() > 0.3) {
                 simulateCustomerBehavior();
             }
         }, 8000);
 
-        // Close modal when clicking outside
-        document.getElementById('ruleModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
 
-        // Randomly update metrics
-        setInterval(() => {
-            const conversionChange = (Math.random() * 2 - 1).toFixed(1);
-            const currentConversion = parseFloat(document.getElementById('conversionLift').textContent);
-            const newConversion = (currentConversion + parseFloat(conversionChange)).toFixed(0);
-            document.getElementById('conversionLift').textContent = `+${newConversion}%`;
-        }, 15000);
+/* =======================
+   CLEAR FEED
+======================= */
+function clearActivities() {
+    document.getElementById('activityFeed').innerHTML =
+        `<div class="activity-item">
+            <div class="activity-icon">✨</div>
+            <div class="activity-content">
+                <div class="activity-title">Feed Cleared</div>
+                <div class="activity-description">Ready for new activity</div>
+            </div>
+        </div>`;
+}
+

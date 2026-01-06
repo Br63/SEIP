@@ -4,16 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEIP - Smart E-Commerce Intelligence Platform</title>
-   <link rel="stylesheet" href="style.css">
-   <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <img src="Images/seip_logo (1).svg" alt="SEIP Logo" style="width: 140px; height: auto; margin-bottom: 10px;">
-    <div class="container">
+     <!-- <img src="Images/seip_logo (1).svg" alt="SEIP Logo" style="width: 140px; height: auto; margin-bottom: 10px;"> -->
 
+    <div class="container">
         <header>
-            <h1>🚀 Smart E-Commerce Intelligence Platform</h1>
-            <p class="tagline">Turning decisions into automated actions</p>
+            <div class="header">
+                <h1>🚀 Smart E-Commerce Intelligence Platform</h1>
+                <p class="tagline">Turning data into decisions.</p>
+            </div>
+            <div style="position: relative;">
+                <div class="notification-bell" onclick="toggleNotifications(event)">
+                    <span class="bell-icon">🔔</span>
+                    <span class="notification-badge" id="notificationCount">5</span>
+                </div>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <span class="clear-all-btn" onclick="clearAllNotifications()">Clear All</span>
+                    </div>
+                    <div id="notificationList">
+                        <!-- Notifications will be added here -->
+                    </div>
+                </div>
+            </div>
         </header>
 
         <div class="controls">
@@ -31,7 +48,7 @@
         <div class="dashboard">
             <div class="card">
                 <div class="card-header">
-                    <div class="icon blue">👥</div>
+                    <div class="icon purple">👥</div>
                     <div class="card-title">Active Customers</div>
                 </div>
                 <div class="metric" id="activeCustomers">1,247</div>
@@ -49,7 +66,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <div class="icon orange">📈</div>
+                    <div class="icon pink">📈</div>
                     <div class="card-title">Conversion Lift</div>
                 </div>
                 <div class="metric" id="conversionLift">+23%</div>
@@ -57,7 +74,7 @@
             </div>
         </div>
 
-        <div class="activity-section">
+          <div class="activity-section">
             <h2 class="section-title">Real-Time Intelligence Feed</h2>
             <div class="activity-feed" id="activityFeed">
                 <div class="activity-item">
@@ -76,45 +93,48 @@
             <h2 class="section-title">Active Business Rules</h2>
             <div id="rulesContainer">
                 <div class="rule-item" data-rule-id="1">
-                    <div class="rule-toggle active" onclick="toggleRule(1)"></div>
+                    <div class="rule-toggle active" onclick="toggleRule(1, event)"></div>
                     <div class="rule-trigger">🎯 TRIGGER: Customer views same product 3+ times</div>
                     <div class="rule-arrow">↓</div>
                     <div class="rule-action">ACTION: Send 10% discount code via email instantly</div>
                     <div class="rule-stats">
                         <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
-                        <div class="stat">📊 Triggered <span class="rule-count">23</span> times today</div>
-                        <div class="stat">✅ 61% conversion rate</div>
+                        <div class="stat">📊 Triggered <span class="rule-count">156</span> times this week</div>
+                        <div class="stat">✅ 64% conversion rate</div>
                     </div>
+                    <button class="view-analytics-btn" onclick="openAnalytics(1, event)">📊 View Performance Analytics</button>
                 </div>
 
                 <div class="rule-item" data-rule-id="2">
-                    <div class="rule-toggle active" onclick="toggleRule(2)"></div>
+                    <div class="rule-toggle active" onclick="toggleRule(2, event)"></div>
                     <div class="rule-trigger">🛒 TRIGGER: Cart value > $100 + 20min inactivity</div>
                     <div class="rule-arrow">↓</div>
                     <div class="rule-action">ACTION: Send free shipping offer + product reminder</div>
                     <div class="rule-stats">
                         <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
-                        <div class="stat">📊 Triggered <span class="rule-count">15</span> times today</div>
-                        <div class="stat">✅ 47% recovery rate</div>
+                        <div class="stat">📊 Triggered <span class="rule-count">98</span> times this week</div>
+                        <div class="stat">✅ 52% recovery rate</div>
                     </div>
+                    <button class="view-analytics-btn" onclick="openAnalytics(2, event)">📊 View Performance Analytics</button>
                 </div>
 
                 <div class="rule-item" data-rule-id="3">
-                    <div class="rule-toggle active" onclick="toggleRule(3)"></div>
+                    <div class="rule-toggle active" onclick="toggleRule(3, event)"></div>
                     <div class="rule-trigger">📅 TRIGGER: Previous customer + 30 days no visit</div>
                     <div class="rule-arrow">↓</div>
                     <div class="rule-action">ACTION: Send personalized "We miss you" + 15% discount</div>
                     <div class="rule-stats">
                         <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
-                        <div class="stat">📊 Triggered <span class="rule-count">8</span> times today</div>
-                        <div class="stat">✅ 34% reactivation rate</div>
+                        <div class="stat">📊 Triggered <span class="rule-count">43</span> times this week</div>
+                        <div class="stat">✅ 38% reactivation rate</div>
                     </div>
+                    <button class="view-analytics-btn" onclick="openAnalytics(3, event)">📊 View Performance Analytics</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Rule Builder -->
+ <!-- Modal for Rule Builder -->
     <div class="modal" id="ruleModal">
         <div class="modal-content">
             <div class="modal-header">Create New Business Rule</div>
@@ -144,12 +164,28 @@
                     </select>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn btn-danger" onclick="closeModal()">Cancel</button>
+                   <button
+  type="button"
+  class="btn btn-danger"
+  onclick="closeModal('ruleModal'); return false;">
+  Cancel
+</button>
                     <button type="submit" class="btn btn-success">Create Rule</button>
                 </div>
             </form>
         </div>
     </div>
+    
+    <!-- Modal for Analytics -->
+    <div class="modal" id="analyticsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="analyticsTitle">Performance Analytics</span>
+                <span class="close-modal" onclick="closeModal('analyticsModal')">&times;</span>
+            </div>
+            <div id="analyticsContent">
+                <!-- Analytics content will be loaded here -->
+            </div>
+        </div>
+    </div>
 
-</body>
-</html>
