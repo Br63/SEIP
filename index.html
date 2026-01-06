@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEIP - Smart E-Commerce Intelligence Platform</title>
+   <link rel="stylesheet" href="style.css">
+   <script src="script.js"></script>
+</head>
+<body>
+    <img src="Images/seip_logo.svg" alt="SEIP Logo" style="width: 120px; height: auto; margin-bottom: 10px;">
+    <div class="container">
+
+        <header>
+            <h1>🚀 Smart E-Commerce Intelligence Platform</h1>
+            <p class="tagline">Turning decisions into automated actions</p>
+        </header>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="simulateCustomerBehavior()">
+                🎭 Simulate Customer Behavior
+            </button>
+            <button class="btn btn-success" onclick="openRuleBuilder()">
+                ➕ Create New Rule
+            </button>
+            <button class="btn btn-danger" onclick="clearActivities()">
+                🗑️ Clear Activity Feed
+            </button>
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon blue">👥</div>
+                    <div class="card-title">Active Customers</div>
+                </div>
+                <div class="metric" id="activeCustomers">1,247</div>
+                <div class="metric-label">Currently browsing</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon green">💰</div>
+                    <div class="card-title">AI Actions Today</div>
+                </div>
+                <div class="metric" id="aiActions">89</div>
+                <div class="metric-label">Automated interventions</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon orange">📈</div>
+                    <div class="card-title">Conversion Lift</div>
+                </div>
+                <div class="metric" id="conversionLift">+23%</div>
+                <div class="metric-label">vs. last week</div>
+            </div>
+        </div>
+
+        <div class="activity-section">
+            <h2 class="section-title">Real-Time Intelligence Feed</h2>
+            <div class="activity-feed" id="activityFeed">
+                <div class="activity-item">
+                    <div class="activity-icon">👁️</div>
+                    <div class="activity-content">
+                        <div class="activity-title">High Intent Detected</div>
+                        <div class="activity-description">Customer #4821 viewed "Wireless Headphones Pro" 3 times in 10 minutes</div>
+                        <div class="activity-time">Just now</div>
+                    </div>
+                    <div class="activity-action">✉️ 10% DISCOUNT SENT</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rules-section">
+            <h2 class="section-title">Active Business Rules</h2>
+            <div id="rulesContainer">
+                <div class="rule-item" data-rule-id="1">
+                    <div class="rule-toggle active" onclick="toggleRule(1)"></div>
+                    <div class="rule-trigger">🎯 TRIGGER: Customer views same product 3+ times</div>
+                    <div class="rule-arrow">↓</div>
+                    <div class="rule-action">ACTION: Send 10% discount code via email instantly</div>
+                    <div class="rule-stats">
+                        <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
+                        <div class="stat">📊 Triggered <span class="rule-count">23</span> times today</div>
+                        <div class="stat">✅ 61% conversion rate</div>
+                    </div>
+                </div>
+
+                <div class="rule-item" data-rule-id="2">
+                    <div class="rule-toggle active" onclick="toggleRule(2)"></div>
+                    <div class="rule-trigger">🛒 TRIGGER: Cart value > $100 + 20min inactivity</div>
+                    <div class="rule-arrow">↓</div>
+                    <div class="rule-action">ACTION: Send free shipping offer + product reminder</div>
+                    <div class="rule-stats">
+                        <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
+                        <div class="stat">📊 Triggered <span class="rule-count">15</span> times today</div>
+                        <div class="stat">✅ 47% recovery rate</div>
+                    </div>
+                </div>
+
+                <div class="rule-item" data-rule-id="3">
+                    <div class="rule-toggle active" onclick="toggleRule(3)"></div>
+                    <div class="rule-trigger">📅 TRIGGER: Previous customer + 30 days no visit</div>
+                    <div class="rule-arrow">↓</div>
+                    <div class="rule-action">ACTION: Send personalized "We miss you" + 15% discount</div>
+                    <div class="rule-stats">
+                        <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
+                        <div class="stat">📊 Triggered <span class="rule-count">8</span> times today</div>
+                        <div class="stat">✅ 34% reactivation rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Rule Builder -->
+    <div class="modal" id="ruleModal">
+        <div class="modal-content">
+            <div class="modal-header">Create New Business Rule</div>
+            <form onsubmit="createRule(event)">
+                <div class="form-group">
+                    <label>Trigger Condition</label>
+                    <select id="triggerType" required>
+                        <option value="">Select trigger...</option>
+                        <option value="views">Product views</option>
+                        <option value="cart">Cart value</option>
+                        <option value="time">Time on site</option>
+                        <option value="inactivity">Inactivity period</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Threshold Value</label>
+                    <input type="text" id="threshold" placeholder="e.g., 3 views, $100, 30 days" required>
+                </div>
+                <div class="form-group">
+                    <label>Action to Take</label>
+                    <select id="actionType" required>
+                        <option value="">Select action...</option>
+                        <option value="discount">Send discount code</option>
+                        <option value="email">Send reminder email</option>
+                        <option value="offer">Send special offer</option>
+                        <option value="notification">Push notification</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-success">Create Rule</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
