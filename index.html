@@ -8,8 +8,6 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-     <!-- <img src="Images/seip_logo (1).svg" alt="SEIP Logo" style="width: 140px; height: auto; margin-bottom: 10px;"> -->
-
     <div class="container">
         <header>
             <div class="header">
@@ -33,108 +31,182 @@
             </div>
         </header>
 
-        <div class="controls">
-            <button class="btn btn-primary" onclick="simulateCustomerBehavior()">
-                🎭 Simulate Customer Behavior
-            </button>
-            <button class="btn btn-success" onclick="openRuleBuilder()">
-                ➕ Create New Rule
-            </button>
-            <button class="btn btn-danger" onclick="clearActivities()">
-                🗑️ Clear Activity Feed
-            </button>
+        <!-- NEW: Quick Access Navigation -->
+        <div class="quick-nav">
+            <button class="nav-btn active" onclick="showSection('dashboard')">📊 Dashboard</button>
+            <button class="nav-btn" onclick="showSection('email-campaigns')">📧 Email Campaigns</button>
+            <button class="nav-btn" onclick="showSection('integrations')">🔌 Integrations</button>
         </div>
 
-        <div class="dashboard">
-            <div class="card">
-                <div class="card-header">
-                    <div class="icon purple">👥</div>
-                    <div class="card-title">Active Customers</div>
-                </div>
-                <div class="metric" id="activeCustomers">1,247</div>
-                <div class="metric-label">Currently browsing</div>
+        <!-- SECTION: Dashboard (Original Content) -->
+        <div id="dashboard-section" class="section-content active">
+            <div class="controls">
+                <button class="btn btn-primary" onclick="simulateCustomerBehavior()">
+                    🎭 Simulate Customer Behavior
+                </button>
+                <button class="btn btn-success" onclick="openRuleBuilder()">
+                    ➕ Create New Rule
+                </button>
+                <button class="btn btn-danger" onclick="clearActivities()">
+                    🗑️ Clear Activity Feed
+                </button>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <div class="icon green">💰</div>
-                    <div class="card-title">AI Actions Today</div>
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon purple">👥</div>
+                        <div class="card-title">Active Customers</div>
+                    </div>
+                    <div class="metric" id="activeCustomers">1,247</div>
+                    <div class="metric-label">Currently browsing</div>
                 </div>
-                <div class="metric" id="aiActions">89</div>
-                <div class="metric-label">Automated interventions</div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon green">💰</div>
+                        <div class="card-title">AI Actions Today</div>
+                    </div>
+                    <div class="metric" id="aiActions">89</div>
+                    <div class="metric-label">Automated interventions</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon pink">📈</div>
+                        <div class="card-title">Conversion Lift</div>
+                    </div>
+                    <div class="metric" id="conversionLift">+23%</div>
+                    <div class="metric-label">vs. last week</div>
+                </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <div class="icon pink">📈</div>
-                    <div class="card-title">Conversion Lift</div>
+            <div class="activity-section">
+                <h2 class="section-title">Real-Time Intelligence Feed</h2>
+                <div class="activity-feed" id="activityFeed">
+                    <div class="activity-item">
+                        <div class="activity-icon">👁️</div>
+                        <div class="activity-content">
+                            <div class="activity-title">High Intent Detected</div>
+                            <div class="activity-description">Customer #4821 viewed "Wireless Headphones Pro" 3 times in 10 minutes</div>
+                            <div class="activity-time">Just now</div>
+                        </div>
+                        <div class="activity-action">✉️ 10% DISCOUNT SENT</div>
+                    </div>
                 </div>
-                <div class="metric" id="conversionLift">+23%</div>
-                <div class="metric-label">vs. last week</div>
+            </div>
+
+            <div class="rules-section">
+                <h2 class="section-title">Active Business Rules</h2>
+                <div id="rulesContainer">
+                    <div class="rule-item" data-rule-id="1">
+                        <div class="rule-toggle active" onclick="toggleRule(1, event)"></div>
+                        <div class="rule-trigger">🎯 TRIGGER: Customer views same product 3+ times</div>
+                        <div class="rule-arrow">↓</div>
+                        <div class="rule-action">ACTION: Send 10% discount code via email instantly</div>
+                        <div class="rule-stats">
+                            <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
+                            <div class="stat">📊 Triggered <span class="rule-count">156</span> times this week</div>
+                            <div class="stat">✅ 64% conversion rate</div>
+                        </div>
+                        <button class="view-analytics-btn" onclick="openAnalytics(1, event)">📊 View Performance Analytics</button>
+                    </div>
+
+                    <div class="rule-item" data-rule-id="2">
+                        <div class="rule-toggle active" onclick="toggleRule(2, event)"></div>
+                        <div class="rule-trigger">🛒 TRIGGER: Cart value > $100 + 20min inactivity</div>
+                        <div class="rule-arrow">↓</div>
+                        <div class="rule-action">ACTION: Send free shipping offer + product reminder</div>
+                        <div class="rule-stats">
+                            <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
+                            <div class="stat">📊 Triggered <span class="rule-count">98</span> times this week</div>
+                            <div class="stat">✅ 52% recovery rate</div>
+                        </div>
+                        <button class="view-analytics-btn" onclick="openAnalytics(2, event)">📊 View Performance Analytics</button>
+                    </div>
+
+                    <div class="rule-item" data-rule-id="3">
+                        <div class="rule-toggle active" onclick="toggleRule(3, event)"></div>
+                        <div class="rule-trigger">📅 TRIGGER: Previous customer + 30 days no visit</div>
+                        <div class="rule-arrow">↓</div>
+                        <div class="rule-action">ACTION: Send personalized "We miss you" + 15% discount</div>
+                        <div class="rule-stats">
+                            <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
+                            <div class="stat">📊 Triggered <span class="rule-count">43</span> times this week</div>
+                            <div class="stat">✅ 38% reactivation rate</div>
+                        </div>
+                        <button class="view-analytics-btn" onclick="openAnalytics(3, event)">📊 View Performance Analytics</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-          <div class="activity-section">
-            <h2 class="section-title">Real-Time Intelligence Feed</h2>
-            <div class="activity-feed" id="activityFeed">
-                <div class="activity-item">
-                    <div class="activity-icon">👁️</div>
-                    <div class="activity-content">
-                        <div class="activity-title">High Intent Detected</div>
-                        <div class="activity-description">Customer #4821 viewed "Wireless Headphones Pro" 3 times in 10 minutes</div>
-                        <div class="activity-time">Just now</div>
-                    </div>
-                    <div class="activity-action">✉️ 10% DISCOUNT SENT</div>
+        <!-- NEW SECTION: Email Campaign Manager -->
+        <div id="email-campaigns-section" class="section-content">
+            <div class="section-header">
+                <h2 class="section-title">📧 Email Campaign Manager</h2>
+                <button class="btn btn-success" onclick="openEmailBuilder()">✨ Create New Campaign</button>
+            </div>
+
+            <div class="email-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📤</div>
+                    <div class="stat-value" id="emailsSent">2,847</div>
+                    <div class="stat-label">Emails Sent This Week</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📬</div>
+                    <div class="stat-value" id="openRate">42.3%</div>
+                    <div class="stat-label">Average Open Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👆</div>
+                    <div class="stat-value" id="clickRate">18.7%</div>
+                    <div class="stat-label">Click-Through Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💵</div>
+                    <div class="stat-value" id="emailRevenue">$12,450</div>
+                    <div class="stat-label">Revenue Generated</div>
+                </div>
+            </div>
+
+            <div class="campaigns-list">
+                <h3 class="subsection-title">Active Campaigns</h3>
+                <div id="campaignsContainer">
+                    <!-- Campaigns will be loaded here -->
+                </div>
+            </div>
+
+            <div class="email-templates-section">
+                <h3 class="subsection-title">Email Templates</h3>
+                <div class="templates-grid" id="templatesGrid">
+                    <!-- Templates will be loaded here -->
                 </div>
             </div>
         </div>
 
-        <div class="rules-section">
-            <h2 class="section-title">Active Business Rules</h2>
-            <div id="rulesContainer">
-                <div class="rule-item" data-rule-id="1">
-                    <div class="rule-toggle active" onclick="toggleRule(1, event)"></div>
-                    <div class="rule-trigger">🎯 TRIGGER: Customer views same product 3+ times</div>
-                    <div class="rule-arrow">↓</div>
-                    <div class="rule-action">ACTION: Send 10% discount code via email instantly</div>
-                    <div class="rule-stats">
-                        <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
-                        <div class="stat">📊 Triggered <span class="rule-count">156</span> times this week</div>
-                        <div class="stat">✅ 64% conversion rate</div>
-                    </div>
-                    <button class="view-analytics-btn" onclick="openAnalytics(1, event)">📊 View Performance Analytics</button>
-                </div>
+        <!-- NEW SECTION: Integration Hub -->
+        <div id="integrations-section" class="section-content">
+            <div class="section-header">
+                <h2 class="section-title">🔌 Integration Hub</h2>
+                <button class="btn btn-primary" onclick="openIntegrationSetup()">➕ Add Integration</button>
+            </div>
 
-                <div class="rule-item" data-rule-id="2">
-                    <div class="rule-toggle active" onclick="toggleRule(2, event)"></div>
-                    <div class="rule-trigger">🛒 TRIGGER: Cart value > $100 + 20min inactivity</div>
-                    <div class="rule-arrow">↓</div>
-                    <div class="rule-action">ACTION: Send free shipping offer + product reminder</div>
-                    <div class="rule-stats">
-                        <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
-                        <div class="stat">📊 Triggered <span class="rule-count">98</span> times this week</div>
-                        <div class="stat">✅ 52% recovery rate</div>
-                    </div>
-                    <button class="view-analytics-btn" onclick="openAnalytics(2, event)">📊 View Performance Analytics</button>
-                </div>
+            <div class="integrations-grid" id="integrationsGrid">
+                <!-- Integrations will be loaded here -->
+            </div>
 
-                <div class="rule-item" data-rule-id="3">
-                    <div class="rule-toggle active" onclick="toggleRule(3, event)"></div>
-                    <div class="rule-trigger">📅 TRIGGER: Previous customer + 30 days no visit</div>
-                    <div class="rule-arrow">↓</div>
-                    <div class="rule-action">ACTION: Send personalized "We miss you" + 15% discount</div>
-                    <div class="rule-stats">
-                        <div class="stat"><span class="pulse"></span> <span class="status-active">ACTIVE</span></div>
-                        <div class="stat">📊 Triggered <span class="rule-count">43</span> times this week</div>
-                        <div class="stat">✅ 38% reactivation rate</div>
-                    </div>
-                    <button class="view-analytics-btn" onclick="openAnalytics(3, event)">📊 View Performance Analytics</button>
+            <div class="integration-logs">
+                <h3 class="subsection-title">Recent Sync Activity</h3>
+                <div class="logs-container" id="syncLogs">
+                    <!-- Sync logs will appear here -->
                 </div>
             </div>
         </div>
     </div>
 
- <!-- Modal for Rule Builder -->
+    <!-- Modal for Rule Builder -->
     <div class="modal" id="ruleModal">
         <div class="modal-content">
             <div class="modal-header">Create New Business Rule</div>
@@ -164,12 +236,7 @@
                     </select>
                 </div>
                 <div class="form-actions">
-                   <button
-  type="button"
-  class="btn btn-danger"
-  onclick="closeModal('ruleModal'); return false;">
-  Cancel
-</button>
+                    <button type="button" class="btn btn-danger" onclick="closeModal('ruleModal'); return false;">Cancel</button>
                     <button type="submit" class="btn btn-success">Create Rule</button>
                 </div>
             </form>
@@ -189,3 +256,93 @@
         </div>
     </div>
 
+    <!-- NEW: Email Campaign Builder Modal -->
+    <div class="modal" id="emailBuilderModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <span>✨ Create Email Campaign</span>
+                <span class="close-modal" onclick="closeModal('emailBuilderModal')">&times;</span>
+            </div>
+            <form onsubmit="createEmailCampaign(event)">
+                <div class="form-group">
+                    <label>Campaign Name</label>
+                    <input type="text" id="campaignName" placeholder="e.g., Holiday Sale 2026" required>
+                </div>
+                <div class="form-group">
+                    <label>Select Template</label>
+                    <select id="emailTemplate" onchange="previewTemplate()" required>
+                        <option value="">Choose a template...</option>
+                        <option value="discount">🎁 Discount Offer</option>
+                        <option value="abandoned-cart">🛒 Abandoned Cart</option>
+                        <option value="welcome">👋 Welcome Email</option>
+                        <option value="winback">💌 Win-Back Campaign</option>
+                        <option value="product-launch">🚀 Product Launch</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Email Subject</label>
+                    <input type="text" id="emailSubject" placeholder="Enter email subject line" required>
+                </div>
+                <div class="form-group">
+                    <label>Target Audience</label>
+                    <select id="targetAudience" required>
+                        <option value="">Select audience...</option>
+                        <option value="all">All Customers</option>
+                        <option value="high-value">High-Value Customers</option>
+                        <option value="at-risk">At-Risk Customers</option>
+                        <option value="new">New Customers</option>
+                        <option value="inactive">Inactive Customers</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Preview</label>
+                    <div class="email-preview" id="emailPreview">
+                        <p style="color: #999;">Select a template to preview</p>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger" onclick="closeModal('emailBuilderModal')">Cancel</button>
+                    <button type="submit" class="btn btn-success">Launch Campaign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- NEW: Integration Setup Modal -->
+    <div class="modal" id="integrationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>🔌 Add New Integration</span>
+                <span class="close-modal" onclick="closeModal('integrationModal')">&times;</span>
+            </div>
+            <form onsubmit="addIntegration(event)">
+                <div class="form-group">
+                    <label>Select Platform</label>
+                    <select id="integrationPlatform" onchange="updateIntegrationFields()" required>
+                        <option value="">Choose platform...</option>
+                        <option value="shopify">🛍️ Shopify</option>
+                        <option value="woocommerce">🛒 WooCommerce</option>
+                        <option value="mailchimp">📧 Mailchimp</option>
+                        <option value="sendgrid">✉️ SendGrid</option>
+                        <option value="stripe">💳 Stripe</option>
+                        <option value="paypal">💰 PayPal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>API Key / Token</label>
+                    <input type="password" id="integrationKey" placeholder="Enter your API key" required>
+                </div>
+                <div class="form-group">
+                    <label>Store URL (if applicable)</label>
+                    <input type="url" id="integrationUrl" placeholder="https://yourstore.com">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger" onclick="closeModal('integrationModal')">Cancel</button>
+                    <button type="submit" class="btn btn-success">Connect Integration</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
